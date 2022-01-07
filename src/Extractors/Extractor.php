@@ -10,8 +10,8 @@ abstract class Extractor {
 	protected string $id;
 	protected Crawler $crawler;
 	protected array $filters;
-	protected string $metadata;
-	
+	protected $metadata = null;
+
 	public function __construct(Crawler $crawler) {
 		$this->crawler = $crawler;
 	}
@@ -24,7 +24,11 @@ abstract class Extractor {
 				continue;
 			}	
 
-			$this->metadata = $crawler->$method(...$args);
+			if ( ! $metadata = $crawler->$method(...$args) ) {
+				continue;
+			};
+
+			$this->metadata = $metadata;
 
 			break;
 		}
