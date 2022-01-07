@@ -1,0 +1,12 @@
+{
+    "require": {
+        "symfony/browser-kit": "^5.4",
+        "symfony/http-client": "^5.4",
+        "symfony/css-selector": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "PaulMorel\\Metascraper\\": "src/" 
+        }
+    }
+}
