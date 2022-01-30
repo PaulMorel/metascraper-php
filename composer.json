@@ -2,11 +2,17 @@
     "require": {
         "symfony/browser-kit": "^5.4",
         "symfony/http-client": "^5.4",
-        "symfony/css-selector": "^5.4"
+        "symfony/css-selector": "^5.4",
+        "pguardiario/phpuri": "^1.0",
+        "symfony/validator": "^5.4"
     },
     "autoload": {
         "psr-4": {
             "PaulMorel\\Metascraper\\": "src/" 
         }
+    },
+    "require-dev": {
+        "spatie/ray": "^1.32",
+        "pestphp/pest": "^1.21"
     }
 }
