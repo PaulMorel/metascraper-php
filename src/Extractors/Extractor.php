@@ -5,26 +5,32 @@ namespace PaulMorel\Metascraper\Extractors;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Collection;
 
-abstract class Extractor {
+abstract class Extractor
+{
 
-	protected string $id;
-	protected Crawler $crawler;
 	protected array $filters;
+	protected array $options;
+	protected array $defaults;
 	protected $metadata = null;
 
-	public function __construct(Crawler $crawler) {
-		$this->crawler = $crawler;
+	public function __construct(array $options = [])
+	{
+		$this->options = array_merge($this->defaults, $options);
 	}
 
-	public function extract(): array {
-		
-		foreach ( $this->filters as [$crawler, $method, $args]) {
-			
-			if ( $crawler->count() === 0 ) {
-				continue;
-			}	
+	public function extract(Crawler $crawler): array
+	{
 
-			if ( ! $metadata = $crawler->$method(...$args) ) {
+		$metadata = null;
+
+		foreach ($this->filters as [$filter, $method, $args]) {
+			$crawler = $crawler->filter($filter);
+
+			if ($crawler->count() === 0) {
+				continue;
+			}
+
+			if (!$metadata = $crawler->$method(...$args)) {
 				continue;
 			};
 
@@ -34,9 +40,7 @@ abstract class Extractor {
 		}
 
 		return [
-			$this->id => $this->metadata
+			$this->options['id'] => $this->metadata
 		];
-
 	}
-
 }
