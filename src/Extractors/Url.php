@@ -8,17 +8,17 @@ class Url extends Extractor {
 
 	protected string $id = 'url';
 
-	public function __construct(Crawler $crawler)
+	public function __construct(array $options = [])
 	{
-		parent::__construct($crawler);
+		parent::__construct($options);
 
 		$this->filters = [
-			[ $this->crawler->filter('meta[property="og:url"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('meta[name="twitter:url"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('meta[property="twitter:url"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('link[rel="canonical"]'), 'attr', ['href'] ],
-			[ $this->crawler->filter('link[rel="alternate"][hreflang="x-default"]'), 'attr', ['href'] ],
-			[ $this->crawler, 'getUri', [] ]
+			[ 'meta[property="og:url"]', 'attr', ['content'] ],
+			[ 'meta[name="twitter:url"]', 'attr', ['content'] ],
+			[ 'meta[property="twitter:url"]', 'attr', ['content'] ],
+			[ 'link[rel="canonical"]', 'attr', ['href'] ],
+			[ 'link[rel="alternate"][hreflang="x-default"]', 'attr', ['href'] ],
+			[ '', 'getUri', [] ]
 		];
 	}
 

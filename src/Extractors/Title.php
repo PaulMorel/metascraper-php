@@ -6,17 +6,19 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class Title extends Extractor {
 
-	protected string $id = 'title';
+	protected array $defaults = [
+		'id' => 'title'
+	];
 
-	public function __construct(Crawler $crawler)
+	public function __construct(array $options = [])
 	{
-		parent::__construct($crawler);
+		parent::__construct($options);
 
 		$this->filters = [
-			[ $this->crawler->filter('meta[property="og:title"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('meta[name="twitter:title"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('meta[property="twitter:title"]'), 'attr', ['content'] ],
-			[ $this->crawler->filter('title'), 'text', [] ],
+			[ 'meta[property="og:title"]', 'attr', ['content'] ],
+			[ 'meta[name="twitter:title"]', 'attr', ['content'] ],
+			[ 'meta[property="twitter:title"]', 'attr', ['content'] ],
+			[ 'title', 'text', [] ],
 		];
 	}
 
