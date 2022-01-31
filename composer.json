@@ -1,9 +1,13 @@
 {
+    "name": "paulmorel/metascraper",
+    "description": "Easily scrape metadata from websites using Open Graph metadata, HTML metadata and a series of fallbacks.",
+    "version": "0.0.1",
+    "keywords": ["metadata", "scraper"],
     "require": {
+        "php": ">=7.2.5",
         "symfony/browser-kit": "^5.4",
         "symfony/http-client": "^5.4",
         "symfony/css-selector": "^5.4",
-        "pguardiario/phpuri": "^1.0",
         "symfony/validator": "^5.4"
     },
     "autoload": {
