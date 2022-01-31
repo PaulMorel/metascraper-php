@@ -2,11 +2,11 @@
 
 namespace PaulMorel\Metascraper\Extractors;
 
-use Symfony\Component\DomCrawler\Crawler;
-
 class Url extends Extractor {
 
-	protected string $id = 'url';
+	protected array $defaults = [
+		'id' => 'url',
+	];
 
 	public function __construct(array $options = [])
 	{
