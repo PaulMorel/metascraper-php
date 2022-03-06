@@ -2,11 +2,15 @@
 
 namespace PaulMorel\Metascraper\Extractors;
 
-use phpUri as PHPUri;
+use PaulMorel\Metascraper\Extractors\Traits\HandlesImages;
+use Symfony\Component\DomCrawler\UriResolver;
 use Symfony\Component\DomCrawler\Crawler;
+
 
 class Favicon extends Extractor {
 
+	use HandlesImages;
+	
 	protected array $defaults = [
 		'id' => 'logo'
 	];
@@ -24,35 +28,20 @@ class Favicon extends Extractor {
 			return [];
 		}
 
-		$filter->each(function(Crawler $node, $i) {
-			ray($this->getImageSize($node), $node->outerHtml());
+		$filter->each(function(Crawler $node, $i) use ($crawler) {
+			$size = $this->getImageSize($node, $crawler);
+
+			if ( $size !== null ) {
+				$size = $this->setImagePriority($size);
+			}
 
 		});
 		
 		return [
-			$this->options['id'] => PHPUri::parse($crawler->getUri())->join($filter->attr('href'))
+			$this->options['id'] => [
+				'url' => UriResolver::resolve($filter->attr('href'), $crawler->getUri())
+			]
 		];
-	}
-
-
-	private function getImageSize(Crawler $node) {
-		
-		// Get size from `sizes` attribute
-		if ( $sizes = $node->attr('sizes') ) {
-			$sizes = preg_replace('/x/', 'x', $sizes);
-			$sizes = explode(' ', $sizes)[0];
-			[$height, $width] = explode('x', $sizes);
-
-			return [$height, $width];
-		}
-
-		// Get size from the `name` attribute
-		
-		// Get size from `content` attribute
-
-		// Get size from the `href` attribute
-
-		// Get size from image
 	}
 
 }
