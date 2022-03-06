@@ -2,7 +2,6 @@
 
 namespace PaulMorel\Metascraper;
 
-
 class Metadata
 {
 

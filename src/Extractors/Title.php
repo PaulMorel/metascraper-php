@@ -2,8 +2,6 @@
 
 namespace PaulMorel\Metascraper\Extractors;
 
-use Symfony\Component\DomCrawler\Crawler;
-
 class Title extends Extractor {
 
 	protected array $defaults = [

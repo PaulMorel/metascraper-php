@@ -40,7 +40,6 @@ class Metascraper
 		$this->client = new HttpBrowser(HttpClient::create());
 		$this->crawler = $this->client->request('GET', $url);
 
-		ray($this->crawler);
 	}
 
 	public function getMetadata(): Metadata
@@ -48,7 +47,6 @@ class Metascraper
 
 		if ( is_null( $this->metadata ) ) {
 
-			ray('extracting');
 			$metadata = array_merge(...array_map(function ($extractor) {
 				return $extractor->extract($this->crawler);
 			}, $this->extractors));
