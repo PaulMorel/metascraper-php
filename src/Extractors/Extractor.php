@@ -3,7 +3,6 @@
 namespace PaulMorel\Metascraper\Extractors;
 
 use Symfony\Component\DomCrawler\Crawler;
-use Illuminate\Support\Collection;
 
 abstract class Extractor
 {
@@ -24,10 +23,13 @@ abstract class Extractor
 		$metadata = null;
 
 		foreach ($this->filters as [$filter, $method, $args]) {
-			$crawler = $crawler->filter($filter);
+			if ( ! empty($filter) ) {
+				$crawler = $crawler->filter($filter);
 
-			if ($crawler->count() === 0) {
-				continue;
+
+				if ($crawler->count() === 0) {
+					continue;
+				}
 			}
 
 			if (!$metadata = $crawler->$method(...$args)) {
