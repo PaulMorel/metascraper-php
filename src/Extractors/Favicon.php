@@ -12,7 +12,8 @@ class Favicon extends Extractor {
 	use HandlesImages;
 	
 	protected array $defaults = [
-		'id' => 'logo'
+		'id' => 'logo',
+		'size' => 'largest'
 	];
 
 	public function __construct(array $options = [])
@@ -28,19 +29,30 @@ class Favicon extends Extractor {
 			return [];
 		}
 
-		$filter->each(function(Crawler $node, $i) use ($crawler) {
-			$size = $this->getImageSize($node, $crawler);
+		$images = [];
 
-			if ( $size !== null ) {
-				$size = $this->setImagePriority($size);
+		// Get info on all images found
+		$filter->each(function(Crawler $node, $i) use ($crawler, &$images) {
+			$imageInfo = $this->getImageInfo($node, $crawler);
+
+			
+			if ( $imageInfo === null ) {
+				return;
 			}
 
+			$imageInfo = $this->setImagePriority($imageInfo);
+			
+			$images[] = $imageInfo;
 		});
+
+		$image = $this->getBestImage($images, $this->options['size']);
+		$image = $this->removePriority($image);
+		$image = $this->castImageSizeToInt($image);
+		$image = $this->setHumanReadableFileSize($image);
+
 		
 		return [
-			$this->options['id'] => [
-				'url' => UriResolver::resolve($filter->attr('href'), $crawler->getUri())
-			]
+			$this->options['id'] => $image
 		];
 	}
 

@@ -8,7 +8,7 @@ use Symfony\Component\HttpClient\HttpClient;
 
 trait HandlesImages {
 
-	private function getImageSize(Crawler $node, Crawler $crawler): ?array {
+	private function getImageInfo(Crawler $node, Crawler $crawler): ?array {
 		
 		// Create HTTP Client
 		$client = HttpClient::create();
@@ -74,5 +74,72 @@ trait HandlesImages {
 		if ( $type == 'ico' ) $priority = 2 * $width;
 
 		return array_merge($imageInfo, compact('priority'));		
+	}
+
+	private function getBestImage(array $collection, $size): ?array {
+
+		ray($collection, $size);
+		// Nothing passed, return nothing
+		if ( is_null($size) ) {
+			return null;
+		}
+
+
+		// Get image with width closest to critera
+		if ( is_int($size)) {
+
+		}
+
+		// Get either smallest or largest image
+		if ( is_string($size)) {
+			switch ($size) {
+				case 'largest':
+					$sort = SORT_DESC;
+					break;
+				
+				case 'smallest':
+					$sort = SORT_ASC;
+					break;
+
+				default:
+					$sort = SORT_DESC;
+					break;
+			}
+
+			ray($sort);
+
+			array_multisort(array_column($collection, 'priority'), (int) $sort, $collection);
+
+			return $collection[0];
+		}
+
+		return null;
+
+	}
+
+	private function removePriority($imageInfo) {
+		unset($imageInfo['priority']);
+		return $imageInfo;
+	}
+
+	private function castImageSizeToInt($imageInfo) {
+		['width' => $width, 'height' => $height] = $imageInfo;
+		$width = (int) $width;
+		$height = (int) $height;
+
+		return array_merge($imageInfo, compact('width', 'height'));
+	}
+
+	private function bytesToHumanReadableFileSize($bytes){
+		$units = ['B', 'kB', 'MB', 'GB', 'TB', 'PB'];
+		for ($i = 0; $bytes > 1000; $i++) $bytes /= 1000;
+		return round($bytes, 2) . ' ' . $units[$i];
+	}
+
+	private function setHumanReadableFileSize($imageInfo) {
+
+		$imageInfo['size_pretty'] = $this->bytesToHumanReadableFileSize($imageInfo['size']);
+
+		return $imageInfo;
 	}
 }
